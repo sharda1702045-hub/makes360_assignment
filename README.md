@@ -43,7 +43,7 @@ Follow these steps to get your development environment up and running.
 
 ## Step 1: Clone Repository
 ```bash
-git clone <repository-url>
+git clone https://github.com/sharda1702045-hub/makes360_assignment.git
 cd makes360_assignment
 ```
 
