@@ -25,8 +25,12 @@ class MailService
                 ->subject($subject);
         });
 
-        // Return a mock message ID or the real one if available from the transport.
-        return $message?->id() ?? 'msg_' . uniqid();
+        // Return the real message ID if available from the transport, or a fallback.
+        if ($message && method_exists($message, 'getMessageId')) {
+            return $message->getMessageId();
+        }
+
+        return 'msg_' . uniqid();
     }
 
     /**

@@ -50,7 +50,7 @@ class SendEmailJob implements ShouldQueue
             ]);
 
             $this->campaign->increment('sent_count');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->fail($e);
         }
     }

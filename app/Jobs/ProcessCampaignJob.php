@@ -60,7 +60,7 @@ class ProcessCampaignJob implements ShouldQueue
                 $stats->increment('sent_count');
                 $stats->increment('delivered_count'); // Assume delivered for now
 
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 Log::error("Failed to send email to {$contact->email}: " . $e->getMessage());
                 $campaign->increment('failed_count');
             }
