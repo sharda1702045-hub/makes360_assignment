@@ -21,7 +21,7 @@ class DummyDataSeeder extends Seeder
     {
         // Truncate existing data for a clean test
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        DB::table('contact_contact_list')->truncate();
+        DB::table('contact_list_mapping')->truncate();
         Contact::truncate();
         ContactList::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
