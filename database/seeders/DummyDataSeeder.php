@@ -19,6 +19,13 @@ class DummyDataSeeder extends Seeder
 {
     public function run(): void
     {
+        // Truncate existing data for a clean test
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        DB::table('contact_contact_list')->truncate();
+        Contact::truncate();
+        ContactList::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
         // 1. Get or Create User
         $user = User::first() ?: User::create([
             'name' => 'Demo User',
@@ -34,7 +41,7 @@ class DummyDataSeeder extends Seeder
         ];
 
         // 3. Create Contacts and map them to lists
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 5; $i++) {
             $contact = Contact::create([
                 'user_id' => $user->id,
                 'email' => "user{$i}@example.com",
@@ -52,6 +59,7 @@ class DummyDataSeeder extends Seeder
             }
         }
 
+        /*
         // 3.5 Create Featured Contacts in all lists
         $featuredEmails = ['vip@example.com', 'test@example.com', 'marketing@example.com'];
         foreach ($featuredEmails as $email) {
@@ -67,6 +75,7 @@ class DummyDataSeeder extends Seeder
                 $list->increment('total_contacts');
             }
         }
+        */
 
         // 4. Create Templates
         $templates = [
