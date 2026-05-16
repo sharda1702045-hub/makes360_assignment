@@ -26,10 +26,14 @@
                 </button>
             </div>
             <div class="flex items-center space-x-3">
-                <a href="{{ route('imports.index') }}" class="px-4 py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700 transition-colors flex items-center">
+                <a href="{{ route('imports.index') }}" class="px-4 py-2.5 bg-slate-50 text-slate-600 text-sm font-bold rounded-xl border border-slate-200 hover:bg-slate-100 transition-colors flex items-center">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
                     Import
                 </a>
+                <button @click="showContactModal = true" class="px-4 py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700 transition-colors flex items-center">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    Add Contact
+                </button>
                 <button class="p-2.5 text-slate-500 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
                 </button>
@@ -148,6 +152,72 @@
             </div>
         </div>
 
+        <!-- Create Contact Modal -->
+        <div 
+            x-show="showContactModal" 
+            class="fixed inset-0 z-50 overflow-y-auto" 
+            style="display: none;"
+        >
+            <div class="flex items-center justify-center min-h-screen px-4">
+                <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity" @click="showContactModal = false"></div>
+                
+                <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 overflow-hidden">
+                    <div class="mb-6">
+                        <h3 class="text-xl font-bold text-slate-900">Add New Contact</h3>
+                        <p class="text-sm text-slate-500">Manually add a single contact to your audience.</p>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold text-slate-700 uppercase">First Name</label>
+                                <input 
+                                    type="text" 
+                                    x-model="newContact.first_name" 
+                                    placeholder="John" 
+                                    class="block w-full px-4 py-3 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+                                >
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold text-slate-700 uppercase">Last Name</label>
+                                <input 
+                                    type="text" 
+                                    x-model="newContact.last_name" 
+                                    placeholder="Doe" 
+                                    class="block w-full px-4 py-3 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+                                >
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold text-slate-700 uppercase">Email Address</label>
+                            <input 
+                                type="email" 
+                                x-model="newContact.email" 
+                                placeholder="john@example.com" 
+                                class="block w-full px-4 py-3 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+                            >
+                        </div>
+                        
+                        <div class="flex items-center justify-end space-x-3 pt-4">
+                            <button @click="showContactModal = false" class="px-4 py-2 text-sm font-bold text-slate-500 hover:text-slate-700">Cancel</button>
+                            <button 
+                                @click="createContact()" 
+                                :disabled="!newContact.email || isSubmitting" 
+                                class="px-6 py-2 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700 disabled:opacity-50 transition-all flex items-center"
+                            >
+                                <span x-show="!isSubmitting">Add Contact</span>
+                                <span x-show="isSubmitting" class="flex items-center">
+                                    <svg class="animate-spin -ml-1 mr-2 h-3 w-3 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                    Adding...
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Create List Modal -->
         <div 
             x-show="showCreateModal" 
@@ -208,9 +278,41 @@
             return {
                 activeTab: 'contacts',
                 showCreateModal: false,
+                showContactModal: false,
                 isSubmitting: false,
                 newList: { name: '' },
+                newContact: { first_name: '', last_name: '', email: '' },
                 notification: { show: false, message: '' },
+                
+                async createContact() {
+                    this.isSubmitting = true;
+                    try {
+                        const response = await fetch('{{ route('audience.store') }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify(this.newContact)
+                        });
+                        
+                        const result = await response.json();
+                        
+                        if (result.success) {
+                            this.showNotification(result.message);
+                            this.showContactModal = false;
+                            this.newContact = { first_name: '', last_name: '', email: '' };
+                            setTimeout(() => window.location.reload(), 1000);
+                        } else {
+                            // Basic error handling for duplicates
+                            alert(result.message || 'Error creating contact');
+                        }
+                    } catch (error) {
+                        console.error('Error creating contact:', error);
+                    } finally {
+                        this.isSubmitting = false;
+                    }
+                },
                 
                 async createList() {
                     this.isSubmitting = true;

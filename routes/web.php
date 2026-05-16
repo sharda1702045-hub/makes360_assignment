@@ -22,6 +22,7 @@ Route::prefix('queue-monitor')->name('queue-monitor.')->group(function () {
 
 Route::prefix('audience')->name('audience.')->group(function () {
     Route::get('/', [\App\Http\Controllers\AudienceController::class, 'index'])->name('index');
+    Route::post('/', [\App\Http\Controllers\AudienceController::class, 'store'])->name('store');
     Route::get('/{id}', [\App\Http\Controllers\AudienceController::class, 'show'])->name('show');
 });
 

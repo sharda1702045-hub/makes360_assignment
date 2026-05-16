@@ -30,4 +30,22 @@ class AudienceController extends Controller
         $all_lists = \App\Models\ContactList::all();
         return view('audience.show', compact('contact', 'all_lists'));
     }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|unique:contacts,email',
+        ]);
+
+        $validated['user_id'] = auth()->id() ?? 1;
+        $contact = $this->audienceService->createContact($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Contact created successfully',
+            'contact' => $contact
+        ]);
+    }
 }

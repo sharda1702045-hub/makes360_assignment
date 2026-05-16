@@ -70,4 +70,15 @@ class AudienceService
         
         return $contact;
     }
+
+    public function createContact(array $data)
+    {
+        return Contact::create([
+            'user_id' => $data['user_id'] ?? 1,
+            'email' => $data['email'],
+            'first_name' => $data['first_name'] ?? '',
+            'last_name' => $data['last_name'] ?? '',
+            'status' => 'active',
+        ]);
+    }
 }
