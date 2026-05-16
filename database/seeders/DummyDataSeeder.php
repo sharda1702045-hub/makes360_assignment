@@ -29,7 +29,7 @@ class DummyDataSeeder extends Seeder
         // 1. Get or Create User
         $user = User::first() ?: User::create([
             'name' => 'Demo User',
-            'email' => 'demo@example.com',
+            'email' => 'demo@yopmail.com',
             'password' => Hash::make('password'),
         ]);
 
@@ -44,7 +44,7 @@ class DummyDataSeeder extends Seeder
         for ($i = 0; $i < 5; $i++) {
             $contact = Contact::create([
                 'user_id' => $user->id,
-                'email' => "user{$i}@example.com",
+                'email' => "user{$i}@yopmail.com",
                 'first_name' => "User{$i}",
                 'last_name' => "Smith",
                 'status' => rand(0, 10) > 8 ? 'suppressed' : 'active',
@@ -61,7 +61,7 @@ class DummyDataSeeder extends Seeder
 
         /*
         // 3.5 Create Featured Contacts in all lists
-        $featuredEmails = ['vip@example.com', 'test@example.com', 'marketing@example.com'];
+        $featuredEmails = ['vip@yopmail.com', 'test@yopmail.com', 'marketing@yopmail.com'];
         foreach ($featuredEmails as $email) {
             $featured = Contact::create([
                 'user_id' => $user->id,

@@ -170,7 +170,7 @@
                     const demoValues = {
                         'first_name': 'Alex',
                         'last_name': 'Smith',
-                        'email': 'alex@example.com',
+                        'email': 'alex@yopmail.com',
                         'company': 'BEMP Inc.',
                         'campaign_name': 'Summer Sale 2024',
                         'unsubscribe_link': '#'

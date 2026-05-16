@@ -20,7 +20,7 @@ class SystemSeeder extends Seeder
         // 1. Create Admin User
         $user = User::create([
             'name' => 'Admin User',
-            'email' => 'admin@example.com',
+            'email' => 'admin@yopmail.com',
             'password' => Hash::make('password'),
         ]);
 
@@ -28,7 +28,7 @@ class SystemSeeder extends Seeder
         for ($i = 0; $i < 50; $i++) {
             Contact::create([
                 'user_id' => $user->id,
-                'email' => "contact{$i}@example.com",
+                'email' => "contact{$i}@yopmail.com",
                 'first_name' => "FirstName{$i}",
                 'last_name' => "LastName{$i}",
                 'status' => $i % 10 == 0 ? 'suppressed' : 'active',
